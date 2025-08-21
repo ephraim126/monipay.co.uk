@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>MONIPAY • Daily Tasks</title>
+<style>
+:root {
+  --blue: #007bff;
+  --blue-dark: #0056b3;
+  --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --headerH: 60px;
+}
+* {
+  margin: 0; padding: 0; box-sizing: border-box;
+  font-family: Arial, Helvetica, sans-serif;
+}
+body {
+  background: #f2f2f2; color: #1a1a1a;
+  display: flex; flex-direction: column;
+  min-height: 100vh;
+}
+header {
+  position: sticky; top: 0; width: 100%;
+  background: #fff; padding: 15px 20px;
+  box-shadow: var(--shadow);
+  display: flex; justify-content: center;
+  align-items: center; z-index: 100;
+}
+.hamburger {
+  position: absolute; left: 18px; top: 50%;
+  transform: translateY(-50%);
+  display: flex; flex-direction: column;
+  gap: 5px; cursor: pointer;
+}
+.hamburger span {
+  width: 25px; height: 3px;
+  background: #333; border-radius: 2px;
+}
+.logoBar { display: flex; align-items: center; gap: 10px; }
+.logo-circle {
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  background: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+  font-size: 18px;
+  color: gold;
+  border: 2px solid #007dff;
+}
+.logoBar span { font-size: 26px; font-weight: 900; color: var(--blue); }
+.menu {
+  position: fixed; top: var(--headerH); left: 0;
+  width: 220px; height: calc(100vh - var(--headerH));
+  background: #fff; box-shadow: var(--shadow);
+  padding: 20px; transform: translateX(-100%);
+  transition: 0.35s; z-index: 90; overflow-y: auto;
+}
+.menu.open { transform: translateX(0); }
+.menu li { list-style: none; margin-bottom: 24px; font-size: 18px; font-weight: 600; }
+.menu a { text-decoration: none; color: #1a1a1a; }
+main {
+  flex: 1; display: flex;
+  justify-content: center; align-items: flex-start;
+  padding: 20px;
+}
+.content-wrapper {
+  width: 100%;
+  max-width: 620px;
+}
+.notice {
+  background: #fff; border-radius: 10px;
+  box-shadow: var(--shadow); padding: 24px;
+  text-align: center; margin-bottom: 22px;
+}
+.notice h3 { margin-bottom: 10px; color: var(--blue); }
+.progress {
+  height: 10px; width: 100%;
+  background: #e9ecef; border-radius: 6px;
+  margin-top: 12px;
+}
+.progress div {
+  height: 100%;
+  background: var(--blue);
+  border-radius: 6px;
+  transition: width 0.3s;
+}
+.task-list li {
+  background: #fff; border-radius: 10px;
+  box-shadow: var(--shadow); display: flex;
+  justify-content: space-between; align-items: center;
+  padding: 18px; margin-bottom: 18px;
+}
+.task-list button {
+  padding: 8px 18px;
+  background: var(--blue); color: #fff;
+  border: none; border-radius: 8px;
+  font-weight: 600; cursor: pointer;
+}
+.task-list button:hover:not(:disabled) {
+  background: var(--blue-dark);
+}
+.task-list button:disabled {
+  background: #888;
+  cursor: not-allowed;
+}
+footer {
+  text-align: center;
+  background: #000;
+  color: #fff;
+  padding: 16px;
+  font-size: 14px;
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="hamburger" id="burger"><span></span><span></span><span></span></div>
+  <div class="logoBar">
+    <div class="logo-circle">$</div>
+    <span>MONIPAY</span>
+  </div>
+</header>
+
+<nav class="menu" id="drawer">
+  <ul>
+    <li><a href="home.html">🏠 Home</a></li>
+    <li><a href="account.html">👤 Account</a></li>
+    <li><a href="withdraw.html">💸 Withdraw</a></li>
+    <li><a href="tasks.html">📝 Earn Task</a></li>
+    <li><a href="elearn.html">📖 E-Learning</a></li>
+    <li><a href="mine.html">⛏️ 24hr Mining</a></li>
+    <li><a href="setting.html">⚙️ Settings</a></li>
+    <li><a href="daily.html">🔥 Earn ₦15k Daily</a></li>
+    <li><a href="login.html">🚪 Logout</a></li>
+  </ul>
+</nav>
+
+<main>
+  <div class="content-wrapper">
+    <div class="notice">
+      <h3 id="status"></h3>
+      <p>Complete up to <b>10</b> tasks today. Each pays <b>₦200</b>.</p>
+      <div class="progress"><div id="bar"></div></div>
+    </div>
+
+    <ul class="task-list" id="taskList"></ul>
+  </div>
+</main>
+
+<footer>© <span id="yr"></span> MONIPAY. All rights reserved.</footer>
+
+<script>
+/* ====== SETTINGS ====== */
+const DAILY = 10;
+const REWARD = 200;
+const BAL_KEY = "monipay_balance";
+const TASK_KEY = "monipay_tasks";
+const DATE_KEY = "monipay_date";
+
+/* ====== INIT ====== */
+document.getElementById('yr').textContent = new Date().getFullYear();
+const today = new Date().toISOString().split("T")[0];
+let tasks = JSON.parse(localStorage.getItem(TASK_KEY)) || [];
+let lastDate = localStorage.getItem(DATE_KEY);
+let balance = parseInt(localStorage.getItem(BAL_KEY)) || 0;
+
+if (lastDate !== today) {
+  tasks = [];
+  localStorage.setItem(TASK_KEY, JSON.stringify(tasks));
+  localStorage.setItem(DATE_KEY, today);
+}
+
+/* ====== RENDER ====== */
+const statusEl = document.getElementById("status");
+const barEl = document.getElementById("bar");
+const listEl = document.getElementById("taskList");
+
+function render() {
+  const done = tasks.length;
+  const remaining = DAILY - done;
+  statusEl.textContent = remaining > 0 ? `${remaining} task(s) remaining today` : "Daily limit reached – come back tomorrow";
+  barEl.style.width = `${(done / DAILY) * 100}%`;
+
+  listEl.innerHTML = "";
+  for (let i = 1; i <= DAILY; i++) {
+    const doneTask = tasks.includes("task" + i);
+    const li = document.createElement("li");
+    li.innerHTML = `
+      <span>Task ${i} – Watch a short ad</span>
+      <button ${doneTask ? "disabled" : ""}>
+        ${doneTask ? "Done" : "Complete"}
+      </button>
+    `;
+    const btn = li.querySelector("button");
+    if (!doneTask) btn.onclick = () => completeTask("task" + i, btn);
+    listEl.appendChild(li);
+  }
+}
+
+function completeTask(id, btn) {
+  if (tasks.length >= DAILY || tasks.includes(id)) {
+    alert("You’ve already completed this task or reached the limit.");
+    return;
+  }
+  tasks.push(id);
+  balance += REWARD;
+  localStorage.setItem(TASK_KEY, JSON.stringify(tasks));
+  localStorage.setItem(BAL_KEY, balance);
+  alert(`Great! You earned ₦${REWARD}`);
+  render();
+}
+
+render();
+
+/* ====== Drawer Toggle ====== */
+const burger = document.getElementById('burger');
+const drawer = document.getElementById('drawer');
+burger.onclick = () => drawer.classList.toggle('open');
+document.addEventListener('click', e => {
+  if (drawer.classList.contains('open') && !drawer.contains(e.target) && !burger.contains(e.target))
+    drawer.classList.remove('open');
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>MONIPAY | Welcome</title>
+  <link rel="icon" type="image/png" href="image/doller.jpg" />
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: #000;
+      color: #1a1a1a;
+    }
+
+    /* Hero Section */
+    .hero {
+      height: 200px;
+      background: url("hero.jpg") center/cover no-repeat;
+      position: relative;
+    }
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.55);
+    }
+    .brand-overlay {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1;
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(255,255,255,0.1);
+      padding: 10px 20px;
+      border-radius: 8px;
+    }
+    /* White circle with gold $ */
+    .logo-circle {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-weight: bold;
+      font-size: 22px;
+      color: gold;
+      border: 2px solid #007dff;
+    }
+    .logo-text {
+      font-size: 28px;
+      font-weight: bold;
+      color: #007bff;
+      letter-spacing: 1px;
+    }
+
+    /* Drawer Navigation */
+    .hamburger {
+      position: absolute;
+      top: 18px;
+      left: 18px;
+      z-index: 2;
+      width: 28px;
+      height: 28px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      cursor: pointer;
+    }
+    .hamburger span {
+      width: 100%;
+      height: 3px;
+      background: #fff;
+      border-radius: 2px;
+    }
+    .drawer {
+      position: fixed;
+      top: 0;
+      left: -100%;
+      width: 80%;
+      max-width: 250px;
+      height: 100vh;
+      background: #fff;
+      box-shadow: 4px 0 12px rgba(0,0,0,0.15);
+      padding: 24px 20px;
+      transition: left 0.35s ease;
+      z-index: 100;
+    }
+    .drawer.open { left: 0; }
+    .drawer .close {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      font-size: 28px;
+      border: none;
+      background: none;
+      cursor: pointer;
+      color: #555;
+    }
+    .menu { list-style: none; margin-top: 60px; }
+    .menu li { font-size: 18px; font-weight: 600; margin-bottom: 20px; }
+    .menu li a { text-decoration: none; color: #1a1a1a; }
+
+    /* Main */
+    main {
+      padding: 24px 16px 60px;
+      background: #f2f2f2;
+      min-height: calc(100vh - 250px);
+    }
+    main h2 { color: #007bff; margin-bottom: 10px; }
+    main p { line-height: 1.6; color: #333; font-size: 16px; margin-bottom: 10px; }
+
+    .action { margin-top: 20px; }
+    .action a {
+      display: inline-block;
+      padding: 10px 18px;
+      background: #007bff;
+      color: #fff;
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    .action a:hover { background: #0056b3; }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 12px;
+      background: #000;
+      color: #fff;
+      font-size: 13px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ░░ HERO SECTION ░░ -->
+  <header class="hero" id="heroSection">
+    <div class="hamburger" id="openMenu">
+      <span></span><span></span><span></span>
+    </div>
+    <div class="brand-overlay">
+      <div class="logo">
+        <div class="logo-circle">$</div>
+        <span class="logo-text">MONIPAY</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- ░░ MAIN CONTENT ░░ -->
+  <main>
+    <h2>Welcome to MONIPAY</h2>
+    <p>
+      MONIPAY is a simple, secure platform where users can register, connect, and enjoy our services.
+      We focus on providing convenience and value to every member of our community.
+    </p>
+    <p>
+      Use the menu to learn more about us.
+      Our goal is to make transactions seamless and trustworthy.
+    </p>
+    <div class="action" id="mainActions">
+      <a href="signup.html">📝 Create an Account</a>
+      <a href="login.html" style="margin-left:10px;">🔑 Login</a>
+    </div>
+  </main>
+
+  <!-- ░░ DRAWER NAVIGATION ░░ -->
+  <nav class="drawer" id="drawer">
+    <button class="close" id="closeMenu">&times;</button>
+    <ul class="menu">
+      <li><a href="welcome.html">🏠 Home</a></li>
+      <li><a href="login.html">🔑 Login</a></li>
+      <li><a href="signup.html">📝 Register</a></li>
+      <li><a href="about.html">ℹ️ About Us</a></li>
+      <li><a href="features.html">✨ Features</a></li>
+      <li><a href="contact.html">📩 Contact Us</a></li>
+      <li><a href="privacy.html">🔒 Privacy Policy</a></li>
+      <li><a href="terms.html">📜 Terms of Service</a></li>
+    </ul>
+  </nav>
+
+  <!-- ░░ SCRIPT ░░ -->
+  <script>
+    const currentPage = location.pathname.split("/").pop();
+
+    if (currentPage === "admin.html") {
+      const drawer = document.getElementById('drawer');
+      const mainActions = document.getElementById('mainActions');
+      const openBtn = document.getElementById('openMenu');
+      const hero = document.getElementById('heroSection');
+
+      if (drawer) drawer.style.display = 'none';
+      if (mainActions) mainActions.style.display = 'none';
+      if (openBtn) openBtn.style.display = 'none';
+      if (hero) hero.style.display = 'none';
+    } else {
+      const drawer = document.getElementById('drawer'),
+            openBtn = document.getElementById('openMenu'),
+            closeBtn = document.getElementById('closeMenu');
+
+      openBtn.onclick = () => drawer.classList.add('open');
+      closeBtn.onclick = () => drawer.classList.remove('open');
+
+      document.addEventListener('click', e => {
+        if (drawer.classList.contains('open') && !drawer.contains(e.target) && !openBtn.contains(e.target)) {
+          drawer.classList.remove('open');
+        }
+      });
+
+      document.querySelectorAll('.menu a').forEach(link => {
+        link.addEventListener('click', () => setTimeout(() => drawer.classList.remove('open'), 150));
+      });
+
+      const params = new URLSearchParams(window.location.search);
+      if (params.has("invite") && currentPage !== "welcome.html") {
+        window.location.href = "welcome.html?" + params.toString();
+      }
+    }
+  </script>
+
+  <!-- ░░ FOOTER ░░ -->
+  <footer>
+    &copy; 2025 MONIPAY. All rights reserved.
+  </footer>
+
+</body>
+</html>

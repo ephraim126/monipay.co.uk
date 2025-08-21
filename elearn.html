@@ -1,0 +1,282 @@
+<!DOCTYPE html>  
+<html lang="en">  
+<head>  
+  <meta charset="UTF-8" />  
+  <meta name="viewport" content="width=device-width,initial-scale=1" />  
+  <title>MONIPAY • E-Learning</title>  
+  <style>  
+    :root { --blue:#007bff; --shadow:0 4px 12px rgba(0,0,0,.08); }  
+    * { margin:0; padding:0; box-sizing:border-box; }  
+    body { font-family:sans-serif; background:#f2f2f2; color:#1a1a1a; }  
+
+    header {  
+      position:sticky; top:0; background:#fff;  
+      padding:15px 20px; box-shadow:var(--shadow);  
+      display:flex; justify-content:center; align-items:center; z-index:100;  
+    }  
+
+    .hamburger {  
+      position:absolute; left:18px; top:50%;  
+      transform:translateY(-50%); cursor:pointer;  
+    }  
+
+    .hamburger span {  
+      display:block; width:25px; height:3px; background:#333; margin:5px 0;  
+    }  
+
+    .logoBar {  
+      display:flex; align-items:center; gap:10px;  
+    }  
+
+    /* White Circle with Gold Dollar Sign */  
+    .logoCircle {  
+      width:40px; height:40px;  
+      border-radius:50%;  
+      background:#fff;  
+      display:flex;  
+      align-items:center;  
+      justify-content:center;  
+      font-size:22px;  
+      font-weight:900;  
+      color:gold;  
+      border: #007dff;  
+      box-shadow:0 0 8px rgba(0,0,0,.2);  
+    }  
+
+    .logoBar span {  
+      font-size:26px; font-weight:900; color:var(--blue);  
+    }  
+
+    .menu{position:fixed;top:var(--headerH);left:0;width:220px;height:100%;background:#fff;box-shadow:var(--shadow);padding:20px;transform:translateX(-100%);transition:.3s;z-index:90;overflow-y:auto}  
+    .menu.open{transform:translateX(0)}  
+    .menu li{list-style:none;margin:20px 0}  
+    .menu a{text-decoration:none;color:#333;font-weight:600}  
+
+    main {  
+      max-width:800px;  
+      margin:30px auto;  
+      padding:0 20px;  
+    }  
+
+    .newsCard {  
+      background:#fff;  
+      margin-bottom:15px;  
+      padding:15px;  
+      border-radius:8px;  
+      box-shadow:var(--shadow);  
+    }  
+
+    .newsCard h4 {  
+      margin-bottom:10px;  
+      font-size:16px;  
+      cursor:pointer;  
+      color:#007bff;  
+    }  
+
+    .newsCard button {  
+      background:#007bff;  
+      color:white;  
+      border:none;  
+      padding:8px 12px;  
+      border-radius:5px;  
+      cursor:pointer;  
+    }  
+
+    .newsCard button:disabled {  
+      opacity:0.6;  
+      cursor:not-allowed;  
+    }  
+
+    .pagination {  
+      text-align:center;  
+      margin-top:20px;  
+    }  
+
+    .pagination button {  
+      margin:0 5px;  
+      padding:8px 16px;  
+      background:#007bff;  
+      color:white;  
+      border:none;  
+      border-radius:5px;  
+      cursor:pointer;  
+    }  
+
+    .pagination span {  
+      font-weight:bold;  
+      color:#333;  
+      margin:0 10px;  
+    }  
+
+    footer {  
+      text-align:center;  
+      padding:16px;  
+      background:#000;  
+      color:#fff;  
+      font-size:14px;  
+    }  
+  </style>  
+</head>  
+<body>  
+  <header>  
+    <div class="hamburger" id="hamburger"><span></span><span></span><span></span></div>  
+    <div class="logoBar">  
+      <div class="logoCircle">$</div>  
+      <span>MONIPAY</span>  
+    </div>  
+  </header>  
+
+  <nav class="menu" id="sideMenu">  
+    <ul>  
+      <li><a href="home.html">🏠 Home</a></li>  
+      <li><a href="account.html">👤 Account</a></li>  
+      <li><a href="withdraw.html">💸 Withdraw</a></li>  
+      <li><a href="tasks.html">📝 Earn Task</a></li>  
+      <li><a href="elearn.html">📖 E-Learning</a></li>  
+      <li><a href="mine.html">⛏️ 24hr Mining</a></li>  
+      <li><a href="setting.html">⚙️ Settings</a></li>  
+      <li><a href="daily.html">🔥 Earn ₦15k Daily</a></li>  
+      <li><a href="login.html">🚪 Logout</a></li>  
+    </ul>  
+  </nav>  
+
+  <main id="newsContainer"><p style="text-align:center;">Loading headlines...</p></main>  
+
+  <footer>&copy; <span id="copyYear">2025</span> MONIPAY. All rights reserved.</footer>  
+
+  <script>  
+const API_KEY = 'ee5e11eb3c91600ed4da754261deab55';  
+const BAL_KEY = 'monipay_balance';  
+const READ_KEY = 'monipay_read_urls';  
+const TIMER_KEY = 'monipay_timers';  
+const PAGE_SIZE = 30;  
+let allHeadlines = [];  
+let currentPage = 0;  
+let currentTimerUrl = null;  
+
+// Menu toggle  
+document.getElementById('hamburger').onclick = () => {  
+  document.getElementById('sideMenu').classList.toggle('open');  
+};  
+document.addEventListener('click', e => {  
+  const menu = document.getElementById('sideMenu');  
+  const btn = document.getElementById('hamburger');  
+  if (menu.classList.contains('open') && !menu.contains(e.target) && !btn.contains(e.target)) {  
+    menu.classList.remove('open');  
+  }  
+});  
+
+// LocalStorage helpers  
+function getBalance() { return parseFloat(localStorage.getItem(BAL_KEY) || '0'); }  
+function setBalance(val) { localStorage.setItem(BAL_KEY, val.toFixed(2)); }  
+function getRead() { return JSON.parse(localStorage.getItem(READ_KEY) || '[]'); }  
+function markAsRead(url) {  
+  const read = getRead();  
+  if (!read.includes(url)) {  
+    read.push(url);  
+    localStorage.setItem(READ_KEY, JSON.stringify(read));  
+  }  
+}  
+function getTimers() { return JSON.parse(localStorage.getItem(TIMER_KEY) || '{}'); }  
+function setTimers(obj) { localStorage.setItem(TIMER_KEY, JSON.stringify(obj)); }  
+
+// Fetch and display  
+async function fetchHeadlines() {  
+  try {  
+    const res = await fetch(`https://gnews.io/api/v4/top-headlines?lang=en&country=ng&max=150&token=${API_KEY}`);  
+    const data = await res.json();  
+    allHeadlines = data.articles || [];  
+    renderPage(currentPage);  
+  } catch {  
+    document.getElementById('newsContainer').innerHTML = `<p style="text-align:center">Failed to load news. Check internet connection.</p>`;  
+  }  
+}  
+
+function renderPage(page) {  
+  currentPage = page;  
+  const start = page * PAGE_SIZE;  
+  const end = start + PAGE_SIZE;  
+  const container = document.getElementById('newsContainer');  
+  container.innerHTML = '';  
+  const read = getRead();  
+  const timers = getTimers();  
+  const headlines = allHeadlines.slice(start, end);  
+
+  headlines.forEach((h, i) => {  
+    const div = document.createElement('div');  
+    div.className = 'newsCard';  
+    const isRead = read.includes(h.url);  
+    const remaining = timers[h.url] ? Math.max(0, Math.floor((timers[h.url] - Date.now()) / 1000)) : 0;  
+    const btnId = `btn${i}`;  
+    div.innerHTML = `  
+      <h4 onclick="window.open('${h.url}', '_blank')">${h.title}</h4>  
+      <p><strong>Source:</strong> ${h.source?.name || 'Unknown'}</p>  
+      <button id="${btnId}" ${isRead ? 'disabled' : ''}>${isRead ? '₦50 Earned' : (remaining > 0 ? `Reading... ${remaining}s` : 'Click to Earn ₦50')}</button>  
+    `;  
+    container.appendChild(div);  
+
+    const btn = document.getElementById(btnId);  
+    if (!isRead && remaining > 0) {  
+      resumeTimer(btn, h.url, remaining);  
+    } else if (!isRead && remaining === 0) {  
+      btn.onclick = () => {  
+        if (currentTimerUrl) {  
+          alert("Finish the current headline before starting another.");  
+          return;  
+        }  
+        window.open(h.url, '_blank');  
+        startTimer(btn, h.url);  
+      };  
+    }  
+  });  
+
+  const nav = document.createElement('div');  
+  nav.className = 'pagination';  
+  nav.innerHTML = `  
+    <button onclick="prevPage()" ${page === 0 ? 'disabled' : ''}>Previous</button>  
+    <span>Page ${page + 1} of ${Math.ceil(allHeadlines.length / PAGE_SIZE)}</span>  
+    <button onclick="nextPage()" ${end >= allHeadlines.length ? 'disabled' : ''}>Next</button>  
+  `;  
+  container.appendChild(nav);  
+}  
+
+// Timer Logic  
+function startTimer(button, url) {  
+  button.disabled = true;  
+  currentTimerUrl = url;  
+  const endTime = Date.now() + 30000;  
+  const timers = getTimers();  
+  timers[url] = endTime;  
+  setTimers(timers);  
+  resumeTimer(button, url, 30);  
+}  
+function resumeTimer(button, url, seconds) {  
+  currentTimerUrl = url;  
+  const interval = setInterval(() => {  
+    button.textContent = `Reading... ${seconds}s`;  
+    if (--seconds <= 0) {  
+      clearInterval(interval);  
+      markAsRead(url);  
+      setBalance(getBalance() + 50);  
+      const timers = getTimers();  
+      delete timers[url];  
+      setTimers(timers);  
+      button.textContent = '₦50 Earned';  
+      button.disabled = true;  
+      currentTimerUrl = null;  
+      alert('₦50 has been added to your account!');  
+    }  
+  }, 1000);  
+}  
+
+// Pagination Controls  
+function nextPage() { renderPage(currentPage + 1); }  
+function prevPage() { renderPage(currentPage - 1); }  
+
+// Init  
+fetchHeadlines();  
+setInterval(fetchHeadlines, 30 * 60 * 1000); // Refresh every 30 mins  
+document.getElementById('copyYear').textContent = new Date().getFullYear();  
+  </script>  
+</body>  
+</html>

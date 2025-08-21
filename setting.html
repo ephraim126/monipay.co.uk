@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>MONIPAY • Settings</title>
+  <style>
+    :root {
+      --blue: #007bff;
+      --blue-dark: #0056b3;
+      --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      --headerH: 60px;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background: #eef2f6; color: #222;
+    }
+    header {
+      position: fixed; top: 0; left: 0; width: 100%;
+      height: var(--headerH); background: #fff;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+      display: flex; align-items: center; justify-content: center; z-index: 100;
+    }
+    .hamburger {
+      position: absolute; left: 18px; top: 50%;
+      transform: translateY(-50%); width: 30px;
+      height: 24px; display: flex; flex-direction: column; gap: 5px;
+      cursor: pointer;
+    }
+    .hamburger span { flex: 1; background: #333; border-radius: 2px; }
+    .logoBar { display: flex; align-items: center; gap: 10px; }
+    .logo-circle {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-weight: bold;
+      font-size: 22px;
+      color: gold;
+      border: 2px solid #007dff;
+    }
+    .logoBar span {
+      font-size: 28px; font-weight: 900;
+      letter-spacing: 1px; color: var(--blue);
+    }
+    .menu {
+      position: fixed; top: var(--headerH); left: 0;
+      width: 240px; height: calc(100vh - var(--headerH));
+      background: #fff; box-shadow: var(--shadow);
+      padding: 32px 24px; transform: translateX(-100%);
+      transition: transform 0.35s ease; overflow-y: auto; z-index: 90;
+    }
+    .menu.open { transform: translateX(0); }
+    .menu li { list-style: none; margin-bottom: 28px; font-size: 18px; font-weight: 600; }
+    .menu a { text-decoration: none; color: #1a1a1a; }
+    main {
+      display: flex; justify-content: center; align-items: flex-start;
+      padding: calc(var(--headerH) + 40px) 20px 100px;
+      flex-direction: column; align-items: center;
+    }
+    .form-wrapper { max-width: 500px; width: 100%; margin-bottom: 40px; }
+    form {
+      background: #fff; border-radius: 12px;
+      padding: 24px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+    h1 { text-align: center; margin-bottom: 20px; color: var(--blue); }
+    label {
+      display: block; margin-top: 16px;
+      font-size: 14px; color: #333;
+    }
+    input, select {
+      width: 100%; padding: 10px;
+      border: 1px solid #ccc; border-radius: 6px;
+      margin-top: 6px;
+    }
+    button {
+      margin-top: 22px; width: 100%;
+      padding: 12px; border: none; border-radius: 8px;
+      background: var(--blue); color: #fff; font-size: 16px;
+      cursor: pointer;
+    }
+    button:hover { background: var(--blue-dark); }
+    footer {
+      text-align: center; padding: 16px;
+      background: #000; color: #fff; font-size: 14px;
+    }
+    .saved-info {
+      background: #ccdeff; padding: 20px;
+      border-radius: 10px; box-shadow: var(--shadow);
+      max-width: 500px; width: 100%;
+    }
+    .saved-info h2 {
+      font-size: 20px; margin-bottom: 12px;
+      color: var(--blue);
+    }
+    .saved-info p {
+      margin-bottom: 8px; font-size: 15px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="hamburger" id="hamburger"><span></span><span></span><span></span></div>
+    <div class="logoBar">
+      <div class="logo-circle">$</div>
+      <span>MONIPAY</span>
+    </div>
+  </header>
+
+  <nav class="menu" id="sideMenu">
+    <ul>
+      <li><a href="home.html">🏠 Home</a></li>
+      <li><a href="account.html">👤 Account</a></li>
+      <li><a href="withdraw.html">💸 Withdraw</a></li>
+      <li><a href="tasks.html">📝 Earn Task</a></li>
+      <li><a href="elearn.html">📖 E-Learning</a></li>
+      <li><a href="mine.html">⛏️ 24hr Mining</a></li>
+      <li><a href="setting.html">⚙️ Settings</a></li>
+      <li><a href="daily.html">🔥 Earn ₦15k Daily</a></li>
+      <li><a href="login.html">🚪 Logout</a></li>
+    </ul>
+  </nav>
+
+  <main>
+    <div class="form-wrapper">
+      <form id="settingsForm">
+        <h1>Account Settings</h1>
+        <label for="email">Email Address
+          <input type="email" id="email" name="email" placeholder="you@example.com" required />
+        </label>
+        <label for="fullname">Full Name
+          <input type="text" id="fullname" name="fullname" placeholder="Account Name" required />
+        </label>
+        <label for="bank">Bank Name
+          <select id="bank" name="bank" required>
+            <option value="">Select Bank</option>
+            <option>Access Bank</option>
+            <option>UBA</option>
+            <option>GTBank</option>
+            <option>Zenith Bank</option>
+            <option>First Bank</option>
+            <option>Opay</option>
+            <option>PalmPay</option>
+            <option>Moniepoint</option>
+            <option>Kuda Bank</option>
+            <option>Fidelity Bank</option>
+            <option>Union Bank</option>
+            <option>Keystone Bank</option>
+            <option>Wema Bank</option>
+            <option>Stanbic IBTC</option>
+            <option>Jaiz Bank</option>
+            <option>Heritage Bank</option>
+            <option>SunTrust Bank</option>
+            <option>Unity Bank</option>
+            <option>Polaris Bank</option>
+            <option>EcoBank</option>
+            <option>Providus Bank</option>
+            <option>Rubies Bank</option>
+            <option>Titan Trust</option>
+            <option>Globus Bank</option>
+            <option>Parallex Bank</option>
+            <option>Carbon</option>
+            <option>VFD Microfinance</option>
+            <option>TAJ Bank</option>
+            <option>Paycom (OPay)</option>
+            <option>ALAT by Wema</option>
+            <option>Mint Bank</option>
+            <option>Sparkle Bank</option>
+            <option>GoMoney</option>
+            <option>Kuda Microfinance</option>
+            <option>Chipper Cash</option>
+            <option>FairMoney</option>
+            <option>Branch</option>
+            <option>AB Microfinance</option>
+            <option>Renmoney</option>
+            <option>Pagatech</option>
+            <option>Interswitch</option>
+            <option>FSDH Merchant Bank</option>
+            <option>Coronation Merchant Bank</option>
+            <option>Rand Merchant Bank</option>
+            <option>Nova Merchant Bank</option>
+            <option>NPF Microfinance Bank</option>
+            <option>Greenwich Merchant Bank</option>
+            <option>Lotus Bank</option>
+            <option>PremiumTrust Bank</option>
+          </select>
+        </label>
+        <label for="account">Account Number
+          <input type="text" id="account" name="account" placeholder="0123456789" maxlength="10" pattern="\d{10}" required />
+        </label>
+        <button type="submit">Update Settings</button>
+      </form>
+    </div>
+
+    <div class="saved-info" id="savedInfo" style="display:none;">
+      <h2>Saved Information</h2>
+      <p><strong>Full Name:</strong> <span id="showName"></span></p>
+      <p><strong>Email:</strong> <span id="showEmail"></span></p>
+      <p><strong>Bank:</strong> <span id="showBank"></span></p>
+      <p><strong>Account Number:</strong> <span id="showAccount"></span></p>
+    </div>
+  </main>
+
+  <footer>&copy; 2025 MONIPAY. All rights reserved.</footer>
+
+  <script>
+    const burger = document.getElementById('hamburger'),
+          side = document.getElementById('sideMenu');
+    burger.onclick = () => side.classList.toggle('open');
+    document.addEventListener('click', e => {
+      if (side.classList.contains('open') && !side.contains(e.target) && !burger.contains(e.target))
+        side.classList.remove('open');
+    });
+
+    document.getElementById('settingsForm').addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      const fullname = document.getElementById('fullname').value;
+      const email = document.getElementById('email').value;
+      const bank = document.getElementById('bank').value;
+      const account = document.getElementById('account').value;
+
+      document.getElementById('showName').textContent = fullname;
+      document.getElementById('showEmail').textContent = email;
+      document.getElementById('showBank').textContent = bank;
+      document.getElementById('showAccount').textContent = account;
+
+      document.getElementById('savedInfo').style.display = 'block';
+      alert('Account settings updated successfully.');
+    });
+  </script>
+</body>
+</html>

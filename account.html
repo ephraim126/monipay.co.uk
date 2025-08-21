@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MONIPAY • Account</title>
+<link rel="icon" type="image/png" sizes="192x192" href="">
+<style>
+:root{
+  --blue:#007bff;
+  --blue-dark:#0056b3;
+  --shadow:0 4px 12px rgba(0,0,0,.08);
+  --headerH:60px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:Arial,Helvetica,sans-serif;background:#f2f2f2;color:#1a1a1a}
+
+/* HEADER */
+header{position:sticky;top:0;background:#fff;padding:15px 20px;box-shadow:var(--shadow);display:flex;justify-content:center;align-items:center;z-index:100}
+.hamburger{position:absolute;left:18px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:5px;cursor:pointer}
+.hamburger span{width:25px;height:3px;background:#333;border-radius:2px}
+.logoBar{display:flex;align-items:center;gap:10px}
+.logo-circle{width:40px;height:40px;display:flex;justify-content:center;align-items:center;background:#fff;border-radius:50%;border:2px solid #007dff;font-size:22px;font-weight:900;color:gold;box-shadow:var(--shadow);}
+.logoBar span{font-size:26px;font-weight:900;color:var(--blue)}
+
+/* SIDE MENU */
+.menu{position:fixed;top:var(--headerH);left:0;width:220px;height:100%;background:#fff;box-shadow:var(--shadow);padding:20px;transform:translateX(-100%);transition:.3s;z-index:90;overflow-y:auto}
+.menu.open{transform:translateX(0)}
+.menu li{list-style:none;margin:20px 0}
+.menu a{text-decoration:none;color:#333;font-weight:600}
+
+/* MAIN LAYOUT */
+main{max-width:600px;margin:30px auto 100px;padding:0 20px}
+.balance{background:#fff;border-radius:10px;padding:20px;text-align:center;box-shadow:var(--shadow);margin-bottom:20px}
+.balance h3{font-size:16px;margin-bottom:6px}
+.balance p{font-size:28px;font-weight:700;color:var(--blue)}
+.actions{display:flex;gap:16px;margin-bottom:20px}
+.actionBtn{flex:1;padding:14px 0;background:var(--blue);color:#fff;border:none;border-radius:10px;font-size:16px;font-weight:600;cursor:pointer;box-shadow:var(--shadow)}
+.actionBtn:hover{background:var(--blue-dark)}
+.feature{background:#fff;border-radius:10px;padding:20px;box-shadow:var(--shadow);margin-bottom:20px}
+.copyRow{display:flex;gap:10px}
+.copyRow input{flex:1;padding:10px;border:1px solid #ccc;border-radius:6px}
+.copyRow button{padding:10px 14px;border:none;background:var(--blue);color:#fff;border-radius:6px;cursor:pointer}
+.copyRow button:hover{background:var(--blue-dark)}
+.whatsapp{text-align:center}
+.whatsapp img{width:40px;margin-bottom:10px}
+.whatsapp a{display:inline-block;margin-top:10px;padding:10px 20px;background:#25d366;color:#fff;border-radius:8px;font-weight:600;text-decoration:none}
+.whatsapp a:hover{opacity:.9}
+footer{text-align:center;color:#666;font-size:14px;margin-top:40px}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="hamburger" id="hamburger"><span></span><span></span><span></span></div>
+  <div class="logoBar">
+    <div class="logo-circle">$</div>
+    <span>MONIPAY</span>
+  </div>
+</header>
+
+<!-- SIDE MENU -->
+<nav class="menu" id="sideMenu">
+  <ul>
+    <li><a href="home.html">🏠 Home</a></li>
+    <li><a href="account.html">👤 Account</a></li>
+    <li><a href="withdraw.html">💸 Withdraw</a></li>
+    <li><a href="tasks.html">📝 Earn Task</a></li>
+    <li><a href="elearn.html">📖 E-Learning</a></li>
+    <li><a href="mine.html">⛏️ 24hr Mining</a></li>
+    <li><a href="setting.html">⚙️ Settings</a></li>
+    <li><a href="daily.html">🔥 Earn ₦15k Daily</a></li>
+    <li><a href="login.html">🚪 Logout</a></li>
+  </ul>
+</nav>
+
+<!-- MAIN CONTENT -->
+<main>
+  <div class="balance">
+    <h3>Account Balance</h3>
+    <p id="balance">₦0.00</p>
+  </div>
+
+  <div class="actions">
+    <button class="actionBtn"><a href="tasks.html" style="color:#fff;text-decoration:none">Earn Task</a></button>
+    <button class="actionBtn"><a href="withdraw.html" style="color:#fff;text-decoration:none">Withdraw</a></button>
+  </div>
+
+  <div class="feature">
+    <h3>Your Invitation Link</h3>
+    <div class="copyRow">
+      <input id="inviteLink" readonly>
+      <button id="copyBtn">Copy</button>
+    </div>
+  </div>
+
+  <div class="feature whatsapp">
+    <h3>Join our WhatsApp Channel</h3>
+    <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp">
+    <br>
+    <a href="https://whatsapp.com/channel/0029Vb5svt365yDAqfml8R2H" target="_blank">Join Channel</a>
+  </div>
+
+  <!-- FOOTER -->
+  <footer style="text-align:center;padding:16px;background:#000;color:#fff;font-size:14px;">
+    &copy; <span id="copyYear"></span> MONIPAY. All rights reserved.
+  </footer>
+</main>
+
+<script>
+/* ==== Menu toggle ==== */
+const burger = document.getElementById('hamburger');
+const side   = document.getElementById('sideMenu');
+burger.onclick = () => side.classList.toggle('open');
+document.addEventListener('click', e => {
+  if(side.classList.contains('open') && !side.contains(e.target) && !burger.contains(e.target))
+    side.classList.remove('open');
+});
+
+/* ==== Balance ==== */
+const balEl = document.getElementById('balance');
+function refreshBalance(){
+  let bal = +localStorage.getItem('monipay_balance') || 0;
+  balEl.textContent = `₦${bal.toFixed(2)}`;
+}
+refreshBalance();
+
+/* ==== Invite link with username ==== */
+const inviteInput = document.getElementById('inviteLink');
+let username = localStorage.getItem('monipay_username') || 'Guest';
+inviteInput.value = `https://monipay.com/register?ref=${username}`;
+
+/* ==== Copy invite link ==== */
+document.getElementById('copyBtn').onclick = () => {
+  navigator.clipboard.writeText(inviteInput.value)
+    .then(()=> alert('Invite link copied!'));
+};
+
+/* ==== Year ==== */
+document.getElementById('copyYear').textContent = new Date().getFullYear();
+</script>
+</body>
+</html>

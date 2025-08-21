@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>MONIPAY | Home</title>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:Arial,sans-serif;color:#1a1a1a;background:#000}
+    .hero{height:250px;background:url("hero.jpg") center/cover no-repeat;position:relative}
+    .hero::after{content:"";position:absolute;inset:0;background:rgba(0,0,0,0.4)}
+    .brand-overlay{position:absolute;inset:0;display:flex;justify-content:center;align-items:center;z-index:1}
+    .logo{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,0.1);padding:10px 20px;border-radius:8px}
+    .logo-icon{width:40px;height:40px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;border:2px solid #007dff}
+    .logo-icon span{font-size:22px;font-weight:bold;color:gold}
+    .logo-text{font-size:28px;font-weight:bold;color:#007bff;letter-spacing:1px}
+    .hamburger{position:absolute;top:18px;left:18px;z-index:2;width:30px;height:30px;display:flex;flex-direction:column;justify-content:space-between;cursor:pointer}
+    .hamburger span{width:100%;height:4px;background:#fff;border-radius:2px;transition:transform .3s}
+    .drawer{position:fixed;top:0;left:-100%;width:80%;max-width:300px;height:100vh;background:#fff;box-shadow:4px 0 12px rgba(0,0,0,.15);padding:24px 20px;overflow-y:auto;transition:left .35s ease;z-index:100}
+    .drawer.open{left:0}
+    .drawer .close{position:absolute;top:20px;right:20px;font-size:28px;font-weight:300;border:none;background:none;cursor:pointer;color:#555}
+    .menu{list-style:none;margin-top:10px}
+    .menu li{font-size:18px;font-weight:600;margin-bottom:24px}
+    .menu li a{text-decoration:none;color:#1a1a1a;display:inline-block}
+    .menu li.active a::after{content:"";position:absolute;left:0;bottom:-4px;width:100%;height:3px;background:#ffe5d6;border-radius:2px}
+    main{padding:24px 16px 80px;background:#f2f2f2;min-height:calc(100vh - 300px)}
+    #welcome{font-size:20px;margin-top:12px;font-weight:bold}
+  </style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="hamburger" id="openMenu"><span></span><span></span><span></span></div>
+  <div class="brand-overlay">
+    <div class="logo">
+      <div class="logo-icon"><span>$</span></div>
+      <span class="logo-text">MONIPAY</span>
+    </div>
+  </div>
+</header>
+
+<main>
+  <h2>Dashboard</h2>
+  <p id="welcome">Welcome, Guest!</p>
+</main>
+
+<nav class="drawer" id="drawer">
+  <button class="close" id="closeMenu">&times;</button>
+  <ul class="menu">
+    <li><a href="home.html">🏠 Home</a></li>
+    <li><a href="account.html">👤 Account</a></li>
+    <li><a href="withdraw.html">💸 Withdraw</a></li>
+    <li><a href="tasks.html">📝 Earn Task</a></li>
+    <li><a href="elearn.html">📖 E-Learning</a></li>
+    <li><a href="mine.html">⛏️ 24hr Mining</a></li>
+    <li><a href="setting.html">⚙️ Settings</a></li>
+    <li><a href="daily.html">🔥 Earn ₦15k Daily</a></li>
+    <li><a href="login.html">🚪 Logout</a></li>
+  </ul>
+</nav>
+
+<script>
+const drawer = document.getElementById('drawer'),
+      openBtn = document.getElementById('openMenu'),
+      closeBtn = document.getElementById('closeMenu'),
+      welcome = document.getElementById('welcome');
+
+// Toggle drawer
+openBtn.onclick = () => drawer.classList.add('open');
+closeBtn.onclick = () => drawer.classList.remove('open');
+document.addEventListener('click', e => {
+  if(drawer.classList.contains('open') && !drawer.contains(e.target) && !openBtn.contains(e.target)){
+    drawer.classList.remove('open');
+  }
+});
+
+/**
+ * Show username of logged in user
+ * - "monipay_current_user" stores the email of the logged in user
+ * - "monipay_users_static" stores all registered users
+ */
+function loadWelcome() {
+  const currentEmail = localStorage.getItem("monipay_current_user");
+  const allUsers = JSON.parse(localStorage.getItem("monipay_users_static") || "{}");
+
+  if (currentEmail && allUsers[currentEmail]) {
+    const username = allUsers[currentEmail].username || "User";
+    welcome.textContent = `Welcome, ${username}!`;
+  } else {
+    welcome.textContent = "Welcome, Guest!";
+  }
+}
+
+loadWelcome();
+</script>
+
+<footer style="text-align:center;padding:16px;background:#000;color:#fff;font-size:14px;">
+  &copy; 2025 MONIPAY. All rights reserved.
+</footer>
+</body>
+</html>

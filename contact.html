@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>MONIPAY | Contact Us</title>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:Arial,sans-serif;background:#000;color:#1a1a1a}
+    .hero{height:250px;background:url("hero.jpg") center/cover no-repeat;position:relative}
+    .hero::after{content:"";position:absolute;inset:0;background:rgba(0,0,0,.5)}
+    .brand-overlay{position:absolute;inset:0;display:flex;justify-content:center;align-items:center;z-index:1}
+    .logo{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.1);padding:10px 20px;border-radius:8px}
+    .logo .icon{width:40px;height:40px;display:flex;justify-content:center;align-items:center;
+                background:#fff;border-radius:50%;border:2px solid #007dff;font-size:22px;
+                font-weight:bold;color:gold}
+    .logo-text{font-size:28px;font-weight:bold;color:#007bff;letter-spacing:1px}
+    .copy-badge{position:absolute;right:14px;bottom:14px;padding:3px 10px;font-size:11px;
+                color:#eee;background:rgba(255,255,255,.18);border-radius:6px;backdrop-filter:blur(2px);z-index:2}
+    .hamburger{position:absolute;top:18px;left:18px;z-index:2;width:28px;height:22px;
+               display:flex;flex-direction:column;justify-content:space-between;cursor:pointer}
+    .hamburger span{width:100%;height:3px;background:#fff;border-radius:2px}
+    .drawer{position:fixed;top:0;left:-100%;width:80%;max-width:300px;height:100vh;background:#fff;
+            box-shadow:4px 0 12px rgba(0,0,0,.15);padding:24px 20px;overflow-y:auto;transition:left .35s ease;z-index:100}
+    .drawer.open{left:0}
+    .drawer .close{position:absolute;top:20px;right:20px;font-size:28px;font-weight:300;border:none;background:none;cursor:pointer;color:#555}
+    .menu{list-style:none;margin-top:60px}
+    .menu li{font-size:18px;font-weight:600;margin-bottom:20px;position:relative}
+    .menu a{text-decoration:none;color:#1a1a1a;display:flex;align-items:center;gap:8px}
+    .menu li.active a::after{content:"";position:absolute;left:0;bottom:-4px;width:100%;height:3px;background:#ffffff;border-radius:2px}
+    main{padding:32px 18px 70px;background:#f2f2f2;min-height:calc(100vh - 250px)}
+    h2{color:#007bff;margin-bottom:18px}
+    form{background:#fff;border-radius:10px;box-shadow:0 4px 12px rgba(0,0,0,.08);padding:24px;max-width:550px;margin:auto}
+    label{display:block;font-weight:600;margin-bottom:6px}
+    input,textarea{width:100%;padding:10px 12px;border:1px solid #ccc;border-radius:6px;font-size:15px;font-family:inherit;margin-bottom:16px}
+    textarea{min-height:120px;resize:vertical}
+    button{background:#007bff;color:#fff;border:none;padding:12px 22px;font-size:16px;border-radius:8px;cursor:pointer}
+    button:hover{background:#0056b3}
+    .msg{margin-top:14px;font-weight:600;text-align:center;color:#007b55;display:none}
+    footer{text-align:center;padding:12px;background:#000;color:#fff;font-size:13px}
+  </style>
+</head>
+<body>
+
+  <!-- Hero / Branding -->
+  <header class="hero">
+    <div class="hamburger" id="openMenu"><span></span><span></span><span></span></div>
+    <div class="brand-overlay">
+      <div class="logo">
+        <div class="icon">$</div>
+        <span class="logo-text">MONIPAY</span>
+      </div>
+    </div>
+    <div class="copy-badge">&copy; 2025 MONIPAY</div>
+  </header>
+
+  <!-- Main Content -->
+  <main>
+    <h2>Contact Us</h2>
+    <form id="contactForm">
+      <label for="name">Name</label>
+      <input id="name" name="name" type="text" placeholder="Your name" required>
+
+      <label for="email">Email</label>
+      <input id="email" name="email" type="email" placeholder="you@example.com" required>
+
+      <label for="message">Message</label>
+      <textarea id="message" name="message" placeholder="How can we help you?" required></textarea>
+
+      <button type="submit">Send Message</button>
+      <div class="msg" id="formMsg">✅ Message sent successfully! We will reply soon.</div>
+    </form>
+  </main>
+
+  <!-- Side Drawer Menu -->
+  <nav class="drawer" id="drawer">
+    <button class="close" id="closeMenu">&times;</button>
+    <ul class="menu">
+      <li><a href="index.html">🏠 Home</a></li>
+      <li><a href="login.html">🔑 Login</a></li>
+      <li><a href="signup.html">📝 Register</a></li>
+      <li><a href="about.html">ℹ️ About Us</a></li>
+      <li><a href="features.html">✨ Features</a></li>
+      <li class="active"><a href="contact.html">📩 Contact Us</a></li>
+      <li><a href="privacy.html">🔒 Privacy Policy</a></li>
+      <li><a href="terms.html">📜 Terms of Service</a></li>
+    </ul>
+  </nav>
+
+  <!-- Scripts -->
+  <script>
+    // Drawer toggle
+    const drawer=document.getElementById('drawer'),
+          openBtn=document.getElementById('openMenu'),
+          closeBtn=document.getElementById('closeMenu');
+    openBtn.onclick=()=>drawer.classList.add('open');
+    closeBtn.onclick=()=>drawer.classList.remove('open');
+    document.addEventListener('click',e=>{
+      if(drawer.classList.contains('open')&&!drawer.contains(e.target)&&!openBtn.contains(e.target)){
+        drawer.classList.remove('open');
+      }
+    });
+
+    // Form handling (no backend, just success message)
+    const form=document.getElementById('contactForm');
+    const msg=document.getElementById('formMsg');
+    form.addEventListener('submit',e=>{
+      e.preventDefault(); // stop real submission
+      msg.style.display="block"; // always show success
+      form.reset();
+    });
+  </script>
+
+  <footer>&copy; 2025 MONIPAY. All rights reserved.</footer>
+</body>
+</html>

@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MONIPAY • 24-Hour Mining</title>
+
+<!-- Favicon with white circle & gold $ -->
+<link rel="icon" href='data:image/svg+xml,
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64">
+  <circle cx="32" cy="32" r="30" fill="white" stroke="gold" stroke-width="3"/>
+  <text x="50%" y="50%" text-anchor="middle" dy=".35em" font-size="32" font-weight="bold" fill="gold">$</text>
+</svg>'>
+
+<style>
+:root{--blue:#007bff;--blue-dark:#0056b3;--shadow:0 4px 12px rgba(0,0,0,.08);--headerH:60px;}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:Arial,Helvetica,sans-serif;background:#f2f2f2;color:#1a1a1a}
+
+/* HEADER */
+header{position:sticky;top:0;background:#fff;padding:15px 20px;box-shadow:var(--shadow);display:flex;justify-content:center;align-items:center;z-index:100;position:relative}
+.hamburger{position:absolute;left:18px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:5px;cursor:pointer}
+.hamburger span{width:25px;height:3px;background:#333;border-radius:2px}
+.logoBar{display:flex;align-items:center;gap:10px}
+.logoCircle{width:40px;height:40px;border-radius:50%;background:white;display:flex;justify-content:center;align-items:center;font-size:24px;font-weight:bold;color:gold;border:2px solid #007dff;box-shadow:0 0 6px rgba(0,0,0,0.2)}
+.logoBar span{font-size:26px;font-weight:900;color:var(--blue)}
+
+/* SIDE MENU */
+.menu{position:fixed;top:var(--headerH);left:0;width:220px;height:100%;background:#fff;box-shadow:var(--shadow);padding:20px;transform:translateX(-100%);transition:.3s;z-index:90;overflow-y:auto}
+.menu.open{transform:translateX(0)}
+.menu li{list-style:none;margin:20px 0}
+.menu a{text-decoration:none;color:#333;font-weight:600}
+
+/* MAIN */
+main{max-width:600px;margin:30px auto 100px;padding:0 20px}
+.card{background:#fff;border-radius:10px;padding:20px;box-shadow:var(--shadow);margin-bottom:20px;text-align:center}
+
+/* BUTTONS */
+.btn{display:inline-block;padding:14px 24px;background:var(--blue);color:#fff;border:none;border-radius:10px;font-size:16px;font-weight:600;cursor:pointer;box-shadow:var(--shadow)}
+.btn:hover{background:var(--blue-dark)}
+.btn[disabled]{opacity:.6;cursor:not-allowed}
+.btnRow{display:flex;justify-content:center;flex-wrap:wrap;gap:18px;margin-top:12px}
+.btnRow .btn{flex:1 1 140px;min-width:120px}
+
+/* TIMER */
+#timer{font-size:28px;font-weight:700;color:var(--blue);margin:10px 0}
+
+/* FOOTER */
+footer{text-align:center;color:#666;font-size:14px;margin-top:40px}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="hamburger" id="hamburger"><span></span><span></span><span></span></div>
+  <div class="logoBar">
+    <div class="logoCircle">$</div>
+    <span>MONIPAY</span>
+  </div>
+</header>
+
+<!-- SIDE MENU -->
+<nav class="menu" id="sideMenu">
+  <ul>
+    <li><a href="home.html">🏠 Home</a></li>
+    <li><a href="account.html">👤 Account</a></li>
+    <li><a href="withdraw.html">💸 Withdraw</a></li>
+    <li><a href="tasks.html">📝 Earn Task</a></li>
+    <li><a href="elearn.html">📖 E-Learning</a></li>
+    <li><a href="mine.html">⛏️ 24hr Mining</a></li>
+    <li><a href="setting.html">⚙️ Settings</a></li>
+    <li><a href="daily.html">🔥 Earn ₦15k Daily</a></li>
+    <li><a href="login.html">🚪 Logout</a></li>
+  </ul>
+</nav>
+
+<!-- MAIN -->
+<main>
+  <div class="card">
+    <h3>24-Hour Mining Status</h3>
+    <div id="status">Not mining yet</div>
+    <div id="timer" style="display:none">24:00:00</div>
+    <div class="btnRow">
+      <button id="startBtn" class="btn">Start Mining</button>
+      <button id="withdrawBtn" class="btn" disabled>Withdraw ₦1200</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>How it works</h3>
+    <p>Press <strong>Start Mining</strong>. After 24 hr, press <strong>Withdraw</strong> to credit ₦12 to your account balance.</p>
+  </div>
+
+  <footer style="text-align:center;padding:16px;background:#000;color:#fff;font-size:14px;">
+    &copy; 2025 MONIPAY. All rights reserved.
+  </footer>
+</main>
+
+<script>
+/* PWA Service Worker */
+if('serviceWorker' in navigator){
+  const sw = `const C='monipay-v1';const A=['./mining.html'];self.addEventListener('install',e=>e.waitUntil(caches.open(C).then(c=>c.addAll(A))));self.addEventListener('fetch',e=>e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request))))`;
+  window.addEventListener('load',()=>navigator.serviceWorker.register(URL.createObjectURL(new Blob([sw],{type:'text/javascript'}))));
+}
+
+/* Menu toggle */
+const burger=document.getElementById('hamburger'), side=document.getElementById('sideMenu');
+burger.onclick=()=>side.classList.toggle('open');
+document.addEventListener('click',e=>{
+  if(side.classList.contains('open')&&!side.contains(e.target)&&!burger.contains(e.target))
+    side.classList.remove('open');
+});
+
+/* Mining backend */
+const DUR=24*60*60*1000, REWARD=12; // $12
+const SKEY='monipay_miningStart', FKEY='monipay_miningDone';
+const status=document.getElementById('status'),
+      timer=document.getElementById('timer'),
+      start=document.getElementById('startBtn'),
+      wd=document.getElementById('withdrawBtn');
+let started=+localStorage.getItem(SKEY)||0;
+let done=JSON.parse(localStorage.getItem(FKEY)||'false');
+const pad=n=>String(n).padStart(2,'0');
+
+function draw(){
+  if(!started||done){
+    status.textContent='Not mining yet';
+    timer.style.display='none';
+    start.disabled=false; wd.disabled=true;
+    return;
+  }
+  const rem=DUR-(Date.now()-started);
+  if(rem>0){
+    const h=pad(Math.floor(rem/3600000)),
+          m=pad(Math.floor((rem%3600000)/60000)),
+          s=pad(Math.floor((rem%60000)/1000));
+    status.textContent='Mining…';
+    timer.style.display='block';
+    timer.textContent=`${h}:${m}:${s}`;
+    start.disabled=true; wd.disabled=true;
+  }else{
+    status.textContent='Mining complete!';
+    timer.style.display='block';
+    timer.textContent='00:00:00';
+    start.disabled=true; wd.disabled=false;
+  }
+}
+
+start.onclick=()=>{
+  started=Date.now(); done=false;
+  localStorage.setItem(SKEY,started);
+  localStorage.setItem(FKEY,'false');
+  draw();
+};
+
+wd.onclick=()=>{
+  if(done) return;
+  const bal=+localStorage.getItem('monipay_balance')||0;
+  localStorage.setItem('monipay_balance',(bal+REWARD).toFixed(2));
+  done=true;
+  localStorage.setItem(FKEY,'true');
+  started=0;
+  localStorage.removeItem(SKEY);
+  alert(`$${REWARD.toLocaleString()} added to your balance!`);
+  draw();
+};
+
+setInterval(draw,1000);
+draw();
+</script>
+</body>
+</html>

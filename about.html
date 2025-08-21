@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>MONIPAY | About Us</title>
+
+  <!-- ░░░ STYLE ░░░ -->
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:Arial,sans-serif;background:#000;color:#1a1a1a}
+
+    /* ── HERO ─────────────────────────────────────────────── */
+    .hero{height:250px;background:url("hero.jpg") center/cover no-repeat;position:relative}
+    .hero::after{content:"";position:absolute;inset:0;background:rgba(0,0,0,.5)}
+    .brand-overlay{position:absolute;inset:0;display:flex;justify-content:center;align-items:center;z-index:1}
+    .logo{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.1);padding:10px 20px;border-radius:8px}
+    .logo-circle{width:40px;height:40px;display:flex;justify-content:center;align-items:center;
+                 background:#fff;border-radius:50%;border:2px solid #007dff;
+                 font-size:22px;font-weight:bold;color:gold}
+    .logo-text{font-size:28px;font-weight:bold;color:#007bff;letter-spacing:1px}
+
+    /* Copyright badge inside hero */
+    .copy-badge{position:absolute;right:14px;bottom:14px;padding:3px 10px;
+                font-size:11px;color:#eee;background:rgba(255,255,255,.18);
+                border-radius:6px;backdrop-filter:blur(2px);z-index:2}
+
+    /* ── HAMBURGER & DRAWER ──────────────────────────────── */
+    .hamburger{position:absolute;top:18px;left:18px;z-index:2;width:28px;height:22px;
+               display:flex;flex-direction:column;justify-content:space-between;cursor:pointer}
+    .hamburger span{width:100%;height:3px;background:#fff;border-radius:2px}
+
+    .drawer{position:fixed;top:0;left:-100%;width:80%;max-width:300px;height:100vh;background:#fff;
+            box-shadow:4px 0 12px rgba(0,0,0,.15);padding:24px 20px;overflow-y:auto;
+            transition:left .35s ease;z-index:100}
+    .drawer.open{left:0}
+    .drawer .close{position:absolute;top:20px;right:20px;font-size:28px;font-weight:300;
+                   border:none;background:none;cursor:pointer;color:#555}
+    .menu{list-style:none;margin-top:60px}
+    .menu li{font-size:18px;font-weight:600;margin-bottom:20px;position:relative}
+    .menu a{text-decoration:none;color:#1a1a1a}
+    .menu li.active a::after{content:"";position:absolute;left:0;bottom:-4px;width:100%;
+                              height:3px;background:#ffffff;border-radius:2px}
+
+    /* ── MAIN CONTENT ────────────────────────────────────── */
+    main{padding:32px 18px 70px;background:#f2f2f2;min-height:calc(100vh - 250px)}
+    main h2{color:#007bff;margin-bottom:16px}
+    main h3{margin-top:24px;margin-bottom:8px;color:#007bff}
+    main p{line-height:1.6;color:#333;margin-bottom:12px}
+
+    /* ── FOOTER (if you prefer a bottom bar) ─────────────── */
+    footer{text-align:center;padding:12px;background:#000;color:#fff;font-size:13px}
+  </style>
+</head>
+<body>
+
+  <!-- ░░░ HERO SECTION ░░░ -->
+  <header class="hero">
+    <div class="hamburger" id="openMenu"><span></span><span></span><span></span></div>
+
+    <div class="brand-overlay">
+      <div class="logo">
+        <div class="logo-circle">$</div>
+        <span class="logo-text">MONIPAY</span>
+      </div>
+    </div>
+
+    <!-- tiny copyright badge -->
+    <div class="copy-badge">&copy; 2025 MONIPAY</div>
+  </header>
+
+  <!-- ░░░ MAIN CONTENT ░░░ -->
+  <main>
+    <h2>About MONIPAY</h2>
+    <p>
+      MONIPAY is a Nigerian-born financial empowerment platform that helps everyday people
+      transform their spare minutes into real money. We combine micro-tasks, learning resources,
+      and innovative earning tools so you can build income streams right from your phone.
+    </p>
+
+    <h3>Our Mission</h3>
+    <p>
+      To democratize digital earnings and equip millions with simple, transparent, and rewarding
+      opportunities to grow their wealth online—without complex barriers or hidden fees.
+    </p>
+
+    <h3>Our Vision</h3>
+    <p>
+      A world where anyone with a smartphone can unlock sustainable income, master in-demand
+      skills, and take full control of their financial future.
+    </p>
+
+    <h3>Core Values</h3>
+    <ul style="margin-left:18px;line-height:1.6;color:#333">
+      <li><strong>Transparency —</strong> clear tasks, clear rewards.</li>
+      <li><strong>Empowerment —</strong> giving users skills and earnings that last.</li>
+      <li><strong>Integrity —</strong> no hidden charges, ever.</li>
+      <li><strong>Community —</strong> we grow faster together.</li>
+    </ul>
+
+    <h3>How We Started</h3>
+    <p>
+      Founded in 2024 by a small team of tech enthusiasts and financial educators, MONIPAY began
+      as a simple task-reward app shared among friends. Today, it’s a growing community of
+      thousands who earn, learn, and thrive—in Nigeria and beyond.
+    </p>
+
+    <h3>Why Choose MONIPAY?</h3>
+    <p>
+      • <strong>Daily payouts</strong> (up to ₦15,000).<br>
+      • <strong>Skill-boosting modules</strong> so you earn and learn.<br>
+      • <strong>24/7 support</strong> via WhatsApp and Telegram.<br>
+      • <strong>Zero subscription fees</strong>—keep what you earn.
+    </p>
+
+    <p style="margin-top:26px;font-weight:600;color:#007bff">
+      Ready to start earning? <a href="Signup.html" style="color:#0056b3">Create an account</a> or
+      <a href="Login.html" style="color:#0056b3">log in</a> today!
+    </p>
+  </main>
+
+  <!-- ░░░ DRAWER NAVIGATION ░░░ -->
+  <nav class="drawer" id="drawer">
+    <button class="close" id="closeMenu">&times;</button>
+    <ul class="menu">
+      <li><a href="imdex.html">🏠 Home</a></li>
+      <li><a href="login.html">🔑 Login</a></li>
+      <li><a href="signup.html">📝 Register</a></li>
+      <li><a href="about.html">ℹ️ About Us</a></li>
+      <li><a href="features.html">✨ Features</a></li>
+      <li class="active"><a href="contact.html">📩 Contact Us</a></li>
+      <li><a href="privacy.html">🔒 Privacy Policy</a></li>
+      <li><a href="terms.html">📜 Terms of Service</a></li>
+    </ul>
+  </nav>
+
+  <!-- ░░░ SCRIPT ░░░ -->
+  <script>
+    /* Drawer toggle */
+    const drawer=document.getElementById('drawer'),
+          openBtn=document.getElementById('openMenu'),
+          closeBtn=document.getElementById('closeMenu');
+
+    openBtn.onclick=()=>drawer.classList.add('open');
+    closeBtn.onclick=()=>drawer.classList.remove('open');
+    document.addEventListener('click',e=>{
+      if(drawer.classList.contains('open')&&!drawer.contains(e.target)&&!openBtn.contains(e.target)){
+        drawer.classList.remove('open');
+      }
+    });
+  </script>
+
+  <!-- ░░░ FOOTER (optional bottom bar) ░░░ -->
+  <footer>&copy; 2025 MONIPAY. All rights reserved.</footer>
+
+</body>
+</html>

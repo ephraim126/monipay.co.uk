@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MONIPAY | Admin Dashboard</title>
+<link rel="icon" type="image/png" href="">
+
+<style>
+  *{box-sizing:border-box;margin:0;padding:0;font-family:Arial,sans-serif;}
+  body{background:#f2f2f2;color:#1a1a1a;}
+
+  /* ===== HEADER ===== */
+  header{height:120px;background:#000;display:flex;justify-content:center;align-items:center;}
+  .logo{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,0.15);padding:8px 16px;border-radius:8px;}
+  .logo-circle{
+    width:40px;height:40px;display:flex;justify-content:center;align-items:center;
+    background:#fff;border-radius:50%;border:2px solid #007dff;
+    font-size:22px;font-weight:bold;color:gold;
+  }
+  .logo-text{font-size:24px;font-weight:bold;color:#fff;}
+
+  /* ===== MAIN CONTENT ===== */
+  main{padding:24px;}
+  .login-box,.container{
+    max-width:900px;margin:40px auto;background:#fff;padding:24px;
+    border-radius:12px;box-shadow:0 0 8px rgba(0,0,0,0.08);
+  }
+  .login-box{max-width:380px;}
+  h2{text-align:center;color:#007bff;margin-bottom:20px;}
+  input{width:100%;padding:12px;margin-bottom:16px;border:1px solid #ccc;border-radius:6px;}
+  button{width:100%;padding:12px;background:#007bff;color:#fff;border:none;border-radius:6px;font-size:16px;cursor:pointer;}
+  button:hover{background:#0056b3;}
+  .error{color:red;text-align:center;margin-bottom:12px;}
+
+  /* ===== TABLE ===== */
+  table{width:100%;border-collapse:collapse;margin-top:16px;background:#fff;}
+  th,td{border:1px solid #ddd;padding:12px;text-align:left;}
+  th{background:#007bff;color:#fff;}
+
+  /* ===== BUTTONS ===== */
+  .delete-btn{background:#ff9800;color:#fff;padding:6px 12px;border:none;border-radius:6px;cursor:pointer;transition:.3s;}
+  .delete-btn.deleted{background:#dc3545 !important;}
+  .logout-container{text-align:center;margin:20px auto;max-width:900px;}
+  .logout-btn{display:none;background:#dc3545;color:#fff;padding:10px 20px;border:none;border-radius:6px;cursor:pointer;font-size:15px;}
+  .logout-btn:hover{background:#b52a37;}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="logo">
+    <div class="logo-circle">$</div>
+    <span class="logo-text">MONIPAY</span>
+  </div>
+</header>
+
+<!-- MAIN -->
+<main>
+  <!-- Admin Login -->
+  <div class="login-box" id="adminLogin">
+    <h2>Admin Login</h2>
+    <div class="error" id="errorMsg"></div>
+    <input type="email" id="adminEmail" placeholder="Admin Email" required>
+    <input type="password" id="adminPassword" placeholder="Password" required>
+    <button onclick="loginAdmin()">Login</button>
+  </div>
+
+  <!-- Dashboard -->
+  <div class="container" id="dashboard" hidden>
+    <h2>Registered Users</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Email</th>
+          <th>Username</th>
+          <th>Referred By</th>
+          <th>Registered On</th>
+          <th>Balance (₦)</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody id="userTableBody"></tbody>
+    </table>
+  </div>
+
+  <!-- Logout -->
+  <div class="logout-container">
+    <button class="logout-btn" id="logoutBtn" onclick="logoutAdmin()">Logout</button>
+  </div>
+</main>
+
+<script>
+const USERS_KEY = 'monipay_users_static';
+const ADMIN_SESSION = 'monipay_admin_logged_in';
+
+/* ===== Auto login check ===== */
+window.onload = () => {
+  if(localStorage.getItem(ADMIN_SESSION) === 'true') {
+    showDashboard();
+  }
+};
+
+/* ===== Admin Login ===== */
+function loginAdmin() {
+  const email = document.getElementById('adminEmail').value.trim().toLowerCase();
+  const password = document.getElementById('adminPassword').value;
+  if(email === 'admin@monipay.com' && password === '1234') {
+    localStorage.setItem(ADMIN_SESSION, 'true');
+    showDashboard();
+  } else {
+    document.getElementById('errorMsg').textContent = 'Invalid admin credentials';
+  }
+}
+
+/* ===== Show Dashboard ===== */
+function showDashboard() {
+  document.getElementById('adminLogin').remove();
+  document.getElementById('dashboard').hidden = false;
+  document.getElementById('logoutBtn').style.display = 'inline-block';
+  loadUsers();
+}
+
+/* ===== Logout ===== */
+function logoutAdmin() {
+  localStorage.removeItem(ADMIN_SESSION);
+  location.reload();
+}
+
+/* ===== Load Users ===== */
+function loadUsers() {
+  const users = JSON.parse(localStorage.getItem(USERS_KEY) || '{}');
+  const tbody = document.getElementById('userTableBody');
+  tbody.innerHTML = '';
+  Object.entries(users).forEach(([email, user]) => {
+    const dateObj = new Date(user.createdAt || Date.now());
+    const registeredOn = dateObj.toLocaleDateString() + ' ' + dateObj.toLocaleTimeString();
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td>${email}</td>
+      <td>${user.username}</td>
+      <td>${user.referredBy || '—'}</td>
+      <td>${registeredOn}</td>
+      <td>₦${(user.balance || 0).toLocaleString()}</td>
+      <td><button class="delete-btn" onclick="deleteBalance('${email}', this)">Delete Balance</button></td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+/* ===== Delete Balance ===== */
+function deleteBalance(email, btn) {
+  const users = JSON.parse(localStorage.getItem(USERS_KEY) || '{}');
+  if(users[email]) {
+    users[email].balance = 0;
+    localStorage.setItem(USERS_KEY, JSON.stringify(users));
+    btn.classList.add("deleted");
+    btn.textContent = "Balance Deleted";
+    loadUsers(); // Refresh table
+  }
+}
+</script>
+</body>
+</html>

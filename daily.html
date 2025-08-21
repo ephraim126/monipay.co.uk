@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>MONIPAY • Earn ₦15 k Daily</title>
+<link rel="icon" type="image/png" sizes="192x192" href="">
+
+<!-- ============  STYLE  ============ -->
+<style>
+:root{
+  --blue:#007bff;
+  --blue-dark:#0056b3;
+  --shadow:0 4px 12px rgba(0,0,0,.08);
+  --headerH:60px;
+  --radius:12px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:Arial,Helvetica,sans-serif;background:#f2f2f2;color:#1a1a1a}
+
+/* Header */
+header{position:sticky;top:0;background:#fff;padding:15px 20px;
+       box-shadow:var(--shadow);display:flex;justify-content:center;align-items:center;z-index:100}
+.hamburger{position:absolute;left:18px;top:50%;transform:translateY(-50%);
+           display:flex;flex-direction:column;gap:5px;cursor:pointer}
+.hamburger span{width:25px;height:3px;background:#333;border-radius:2px}
+.logoBar{display:flex;align-items:center;gap:10px}
+/* updated logo-circle design with gold $ */
+.logo-circle{
+  width:38px;height:38px;display:flex;justify-content:center;align-items:center;
+  background:#ffffff;font-size:20px;font-weight:bold;
+  border-radius:50%;box-shadow:0 0 6px rgba(0,0,0,.15);color:gold;border:2px solid #007dff;
+
+}
+.logoBar span{font-size:26px;font-weight:900;color:var(--blue)}
+
+/* Side-menu + drop-downs */
+.menu{position:fixed;top:var(--headerH);left:0;width:230px;height:100%;background:#fff;
+      box-shadow:var(--shadow);padding:20px;transform:translateX(-100%);transition:.3s;z-index:90;
+      overflow-y:auto}
+.menu.open{transform:translateX(0)}
+.menu li{list-style:none;margin:14px 0;font-weight:600}
+.menu a{text-decoration:none;color:#333;display:block}
+.menu li.has-sub>span{display:flex;justify-content:space-between;align-items:center;cursor:pointer}
+.menu li.has-sub ul{display:none;margin-top:8px;padding-left:14px}
+.menu li.has-sub.open ul{display:block}
+.menu li.has-sub ul li{margin:8px 0;font-weight:500;font-size:.95em}
+
+/* Layout */
+main{max-width:700px;margin:30px auto 100px;padding:0 20px}
+
+/* Explainer cards */
+.card{background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);
+      padding:20px;margin-bottom:20px;line-height:1.55}
+.card h3{margin-bottom:6px;display:flex;justify-content:space-between;align-items:center}
+.card h3 small{font-weight:normal;font-size:.85em;color:#555}
+.card button{padding:8px 16px;border:none;border-radius:8px;background:var(--blue);color:#fff;
+             cursor:pointer;font-weight:600;margin-top:12px}
+.card button:hover{background:var(--blue-dark)}
+.card button[disabled]{background:#aaa;cursor:not-allowed}
+.doneBadge{background:#28a745;color:#fff;font-size:.75em;padding:2px 8px;border-radius:999px}
+
+/* Progress */
+.progressWrap{background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);
+              padding:20px;text-align:center;margin-bottom:25px}
+.progressBar{height:12px;width:100%;background:#e9ecef;border-radius:6px;overflow:hidden;margin-top:15px}
+.progressBar div{height:100%;background:var(--blue);transition:width .3s}
+
+/* Footer */
+footer{text-align:center;color:#666;font-size:14px;margin-top:40px}
+</style>
+</head>
+<body>
+
+<!-- ============  HEADER  ============ -->
+<header>
+  <div class="hamburger" id="hamburger"><span></span><span></span><span></span></div>
+  <div class="logoBar">
+    <div class="logo-circle">$</div>
+    <span>MONIPAY</span>
+  </div>
+</header>
+
+<!-- ============  SIDE-MENU  ============ -->
+<nav class="menu" id="sideMenu">
+  <ul>
+    <li><a href="home.html">🏠 Home</a></li>
+    <li><a href="account.html">👤 Account</a></li>
+    <li><a href="withdraw.html">💸 Withdraw</a></li>
+    <li><a href="tasks.html">📝 Earn Task</a></li>
+    <li><a href="elearn.html">📖 E-Learning</a></li>
+    <li><a href="mine.html">⛏️ 24hr Mining</a></li>
+    <li><a href="setting.html">⚙️ Settings</a></li>
+    <li><a href="daily.html">🔥 Earn ₦15k Daily</a></li>
+    <li><a href="login.html">🚪 Logout</a></li>
+  </ul>
+</nav>
+
+<!-- ============  MAIN  ============ -->
+<main>
+  <!-- Overall progress toward ₦15 k -->
+  <section class="progressWrap">
+    <h2>Daily Earnings Goal – ₦15,000</h2>
+    <p id="progText">Calculating…</p>
+    <div class="progressBar"><div id="progBar" style="width:0%"></div></div>
+  </section>
+
+  <!-- HOW MONIPAY WORKS: three streams -->
+  <article class="card" id="taskCard">
+    <h3>
+      ① Complete Daily Tasks
+      <small>₦200 × 10&nbsp;tasks = ₦2 000</small>
+    </h3>
+    <p>
+      Finish up to ten quick ad-view tasks every day. Each one is instantly credited to your
+      balance. Use the “Task List” link above to get started.
+    </p>
+    <span id="taskDone" class="doneBadge" style="display:none">finished</span>
+  </article>
+
+  <article class="card" id="mineCard">
+    <h3>
+      ② 24-Hour Mining
+      <small>≈ ₦1 200 / day</small>
+    </h3>
+    <p>
+      Leave our lightweight miner running in a browser tab for 24 hours. You can pause and resume
+      any time. Once a full day is completed you can claim your reward here.
+    </p>
+  </article>
+
+  <article class="card" id="refCard">
+    <h3>
+      ③ Referral Program
+      <small>₦1 000 / friend <em>up&nbsp;to</em> ₦10 000 / day</small>
+    </h3>
+    <p>
+      Share your personal link. You earn ₦1 000 for every new user who signs up and completes
+      their first task. Claim today’s referral earnings below.
+    </p>
+  </article>
+
+  <!-- ░░░ FOOTER ░░░ -->
+  <footer style="text-align:center;padding:16px;background:#000;color:#fff;font-size:14px;">
+    &copy; <span id="yr"></span> MONIPAY. All rights reserved.
+  </footer>
+</main>
+
+<!-- ============  BACKEND (LocalStorage)  ============ -->
+<script>
+const DAY_KEY      = 'monipay_day';
+const BAL_KEY      = 'monipay_balance';
+const MINE_KEY     = 'monipay_mine_claimed';
+const REF_KEY      = 'monipay_ref_claimed';
+const TASKS_KEY    = 'monipay_tasks10';
+const REWARD_MINE  = 1200;
+const REWARD_REF   = 10000;
+const GOAL         = 15000;
+
+function todayISO(){ return new Date().toLocaleDateString('en-CA'); }
+function resetDaily(){
+  if(localStorage.getItem(DAY_KEY)!==todayISO()){
+    localStorage.setItem(DAY_KEY, todayISO());
+    localStorage.removeItem(MINE_KEY);
+    localStorage.removeItem(REF_KEY);
+  }
+}
+resetDaily();
+
+function getBal(){ return +(localStorage.getItem(BAL_KEY) || 0); }
+function setBal(n){ localStorage.setItem(BAL_KEY, n); }
+
+const yrEl     = document.getElementById('yr');
+const progBar  = document.getElementById('progBar');
+const progText = document.getElementById('progText');
+
+const side   = document.getElementById('sideMenu');
+const burger = document.getElementById('hamburger');
+burger.onclick = ()=> side.classList.toggle('open');
+document.addEventListener('click',e=>{
+  if(side.classList.contains('open') && !side.contains(e.target) && !burger.contains(e.target))
+      side.classList.remove('open');
+});
+document.querySelectorAll('.menu li.has-sub > span').forEach(span=>{
+  span.onclick = ()=> span.parentElement.classList.toggle('open');
+});
+
+function tasksToday(){
+  const ids = JSON.parse(localStorage.getItem(TASKS_KEY) || '[]');
+  return ids.length * 200;
+}
+function miningToday(){ return localStorage.getItem(MINE_KEY) ? REWARD_MINE : 0; }
+function referralToday(){ return localStorage.getItem(REF_KEY) ? REWARD_REF : 0; }
+
+function updateProgress(){
+  const todayTotal = tasksToday() + miningToday() + referralToday();
+  progBar.style.width = Math.min((todayTotal / GOAL) * 100, 100) + '%';
+  progText.textContent = todayTotal >= GOAL
+      ? 'Goal reached! 🎉'
+      : `₦${todayTotal.toLocaleString()} / ₦${GOAL.toLocaleString()} earned today`;
+}
+
+yrEl.textContent = new Date().getFullYear();
+updateProgress();
+</script>
+</body>
+</html>

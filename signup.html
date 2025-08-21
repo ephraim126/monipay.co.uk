@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>MONIPAY | Sign Up</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: Arial, sans-serif; color: #1a1a1a; background: #000; }
+    .hero {
+      height: 250px;
+      background: url("hero.jpg") center/cover no-repeat;
+      position: relative;
+    }
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.4);
+    }
+    .brand-overlay {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1;
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(255,255,255,0.1);
+      padding: 10px 20px;
+      border-radius: 8px;
+    }
+    .logo-circle {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-weight: bold;
+      font-size: 22px;
+      color: gold;
+      border: 2px solid #007dff;
+    }
+    .logo-text {
+      font-size: 28px;
+      font-weight: bold;
+      color: #007bff;
+      letter-spacing: 1px;
+    }
+    main {
+      padding: 24px 16px;
+      background: #f2f2f2;
+      min-height: calc(100vh - 300px);
+    }
+    form {
+      max-width: 400px;
+      margin: 0 auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    label { display: block; margin-bottom: 6px; color: #333; font-weight: 600; }
+    .password-field { position: relative; }
+    input {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 20px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+    input[readonly] { background: #eee; }
+    .toggle-password {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      cursor: pointer;
+      font-size: 14px;
+      color: #007bff;
+      user-select: none;
+    }
+    button {
+      width: 100%;
+      padding: 12px;
+      background: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    button:hover { background: #0056b3; }
+    .extras {
+      text-align: center;
+      font-size: 13px;
+      margin-top: 10px;
+    }
+    .extras a { color: #007bff; text-decoration: none; }
+    .extras a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="brand-overlay">
+    <div class="logo">
+      <div class="logo-circle">$</div>
+      <span class="logo-text">MONIPAY</span>
+    </div>
+  </div>
+</header>
+
+<main>
+  <form id="signupForm" autocomplete="off">
+    <h2 style="text-align:center;margin-bottom:20px;">Create Account</h2>
+
+    <label for="email">Email</label>
+    <input id="email" type="email" placeholder="Enter your Gmail" required />
+
+    <label for="username">Username</label>
+    <input id="username" type="text" placeholder="Choose a username" required />
+
+    <label for="password">Password</label>
+    <div class="password-field">
+      <input id="password" type="password" placeholder="Create a password" required />
+      <span class="toggle-password" id="togglePassword">Show</span>
+    </div>
+
+    <label for="confirm">Confirm Password</label>
+    <div class="password-field">
+      <input id="confirm" type="password" placeholder="Re-enter password" required />
+      <span class="toggle-password" id="toggleConfirm">Show</span>
+    </div>
+
+    <label for="ref">Referred By</label>
+    <input id="ref" type="text" readonly />
+
+    <button type="submit">Sign Up</button>
+
+    <div class="extras">
+      Already have an account? <a href="login.html">Log In</a>
+    </div>
+  </form>
+</main>
+
+<footer style="text-align:center;padding:16px;background:#000;color:#fff;font-size:14px;">
+  &copy; 2025 MONIPAY. All rights reserved.
+</footer>
+
+<script>
+  const urlParams = new URLSearchParams(window.location.search);
+  const ref = urlParams.get('ref');
+  if (ref) document.getElementById('ref').value = ref;
+
+  const USERS_KEY = 'monipay_users_static';
+  function loadUsers() { return JSON.parse(localStorage.getItem(USERS_KEY) || '{}'); }
+  function saveUsers(users) { localStorage.setItem(USERS_KEY, JSON.stringify(users)); }
+
+  function setupToggle(id, toggleId) {
+    const input = document.getElementById(id);
+    const toggle = document.getElementById(toggleId);
+    toggle.addEventListener('click', () => {
+      if (input.type === 'password') { input.type = 'text'; toggle.textContent = 'Hide'; }
+      else { input.type = 'password'; toggle.textContent = 'Show'; }
+    });
+  }
+  setupToggle('password','togglePassword');
+  setupToggle('confirm','toggleConfirm');
+
+  document.getElementById('signupForm').onsubmit = function(e) {
+    e.preventDefault();
+
+    const email = document.getElementById('email').value.trim().toLowerCase();
+    const username = document.getElementById('username').value.trim();
+    const password = document.getElementById('password').value;
+    const confirm = document.getElementById('confirm').value;
+    const referredBy = document.getElementById('ref').value.trim();
+
+    if (!/^[a-zA-Z0-9._%+-]+@gmail\.com$/.test(email)) { alert("Please enter a valid Gmail address."); return; }
+    if (!username || !password || !confirm) { alert("All fields are required."); return; }
+    if (password !== confirm) { alert("Passwords do not match."); return; }
+
+    const users = loadUsers();
+    if (users[email]) { alert("An account with this Gmail already exists."); return; }
+
+    const encodedPassword = btoa(unescape(encodeURIComponent(password)));
+    users[email] = { username, password: encodedPassword, referredBy };
+    saveUsers(users);
+
+    localStorage.setItem('username', username);
+    localStorage.setItem('approved_email', email);
+
+    alert("Sign up successful!");
+    window.location.href = "home.html";
+  };
+</script>
+
+</body>
+</html>

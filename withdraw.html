@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>MONIPAY • Withdraw</title>
+  <style>
+    :root {
+      --blue: #007bff;
+      --blue-dark: #0056b3;
+      --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      --headerH: 60px;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background: #eef2f6; color: #222;
+    }
+    header {
+      position: fixed; top: 0; left: 0; width: 100%;
+      height: var(--headerH); background: #fff;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+      display: flex; align-items: center; justify-content: center; z-index: 100;
+    }
+    .hamburger {
+      position: absolute; left: 18px; top: 50%;
+      transform: translateY(-50%); width: 30px;
+      height: 24px; display: flex; flex-direction: column; gap: 5px;
+      cursor: pointer;
+    }
+    .hamburger span { flex: 1; background: #333; border-radius: 2px; }
+
+    /* Logo with white circle and gold $ */
+    .logoBar {
+      display: flex; align-items: center; gap: 10px;
+    }
+    .logo-circle {
+      width: 40px; height: 40px;
+      border-radius: 50%; background: #fff;
+      display: flex; justify-content: center; align-items: center;
+      font-size: 22px; font-weight: bold; color: gold;
+      border: 2px solid #007dff;
+    }
+    .logoBar span {
+      font-size: 28px; font-weight: 900;
+      letter-spacing: 1px; color: var(--blue);
+    }
+
+    .menu {
+      position: fixed; top: var(--headerH); left: 0;
+      width: 240px; height: calc(100vh - var(--headerH));
+      background: #fff; box-shadow: var(--shadow);
+      padding: 32px 24px; transform: translateX(-100%);
+      transition: transform 0.35s ease; overflow-y: auto; z-index: 90;
+    }
+    .menu.open { transform: translateX(0); }
+    .menu li { list-style: none; margin-bottom: 28px; font-size: 18px; font-weight: 600; }
+    .menu a { text-decoration: none; color: #1a1a1a; }
+
+    main {
+      display: flex; justify-content: center; align-items: flex-start;
+      padding: calc(var(--headerH) + 40px) 20px 100px;
+    }
+    .form-wrapper { max-width: 500px; width: 100%; }
+    form {
+      background: #fff; border-radius: 12px;
+      padding: 24px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+    h1 { text-align: center; margin-bottom: 20px; }
+    label { display: block; margin-top: 16px; font-size: 14px; color: #333; }
+    input, select {
+      width: 100%; padding: 10px;
+      border: 1px solid #ccc; border-radius: 6px; margin-top: 6px;
+    }
+    button {
+      margin-top: 22px; width: 100%;
+      padding: 12px; border: none; border-radius: 8px;
+      background: var(--blue); color: #fff; font-size: 16px;
+      cursor: pointer;
+    }
+    button:hover { background: var(--blue-dark); }
+    .note { font-size: 12px; color: #666; margin-top: 4px; }
+
+    footer {
+      text-align: center; padding: 16px;
+      background: #000; color: #fff; font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="hamburger" id="hamburger"><span></span><span></span><span></span></div>
+    <div class="logoBar">
+      <div class="logo-circle">$</div>
+      <span>MONIPAY</span>
+    </div>
+  </header>
+
+  <nav class="menu" id="sideMenu">
+    <ul>
+      <li><a href="home.html">🏠 Home</a></li>
+      <li><a href="account.html">👤 Account</a></li>
+      <li><a href="withdraw.html">💸 Withdraw</a></li>
+      <li><a href="tasks.html">📝 Earn Task</a></li>
+      <li><a href="elearn.html">📖 E-Learning</a></li>
+      <li><a href="mine.html">⛏️ 24hr Mining</a></li>
+      <li><a href="setting.html">⚙️ Settings</a></li>
+      <li><a href="daily.html">🔥 Earn ₦15k Daily</a></li>
+      <li><a href="login.html">🚪 Logout</a></li>
+    </ul>
+  </nav>
+
+  <main>
+    <div class="form-wrapper">
+      <form id="withdrawForm">
+        <h1>Withdraw Funds</h1>
+
+        <label>Account Name
+          <input name="accName" id="accName" required />
+        </label>
+
+        <label>Bank
+          <select name="bank" id="bankSelect" required>
+            <option value="">Select Bank</option>
+            <option>Access Bank</option>
+            <option>UBA</option>
+            <option>GTBank</option>
+            <option>Zenith Bank</option>
+            <option>First Bank</option>
+            <option>Opay</option>
+            <option>PalmPay</option>
+            <option>Moniepoint</option>
+            <option>Kuda Bank</option>
+            <option>Fidelity Bank</option>
+            <option>Union Bank</option>
+            <option>Keystone Bank</option>
+            <option>Wema Bank</option>
+            <option>Stanbic IBTC</option>
+            <option>Jaiz Bank</option>
+            <option>Heritage Bank</option>
+            <option>SunTrust Bank</option>
+            <option>Unity Bank</option>
+            <option>Polaris Bank</option>
+            <option>EcoBank</option>
+            <option>Providus Bank</option>
+            <option>Rubies Bank</option>
+            <option>Titan Trust</option>
+            <option>Globus Bank</option>
+            <option>Parallex Bank</option>
+            <option>Carbon</option>
+            <option>VFD Microfinance</option>
+            <option>TAJ Bank</option>
+            <option>Paycom (OPay)</option>
+            <option>ALAT by Wema</option>
+            <option>Mint Bank</option>
+            <option>Sparkle Bank</option>
+            <option>GoMoney</option>
+            <option>Kuda Microfinance</option>
+            <option>Chipper Cash</option>
+            <option>FairMoney</option>
+            <option>Branch</option>
+            <option>AB Microfinance</option>
+            <option>Renmoney</option>
+            <option>Pagatech</option>
+            <option>Interswitch</option>
+            <option>FSDH Merchant Bank</option>
+            <option>Coronation Merchant Bank</option>
+            <option>Rand Merchant Bank</option>
+            <option>Nova Merchant Bank</option>
+            <option>NPF Microfinance Bank</option>
+            <option>Greenwich Merchant Bank</option>
+            <option>Lotus Bank</option>
+            <option>PremiumTrust Bank</option>
+          </select>
+        </label>
+
+        <label>Account Number
+          <input name="accNo" id="accNo" pattern="\d{10}" placeholder="10-digit number" maxlength="10" required />
+        </label>
+
+        <label>Amount (₦)
+          <input name="amt" type="number" min="10000" step="0.01" required />
+          <div class="note">Minimum withdrawal: ₦10,000</div>
+        </label>
+
+        <button type="submit">Submit Withdrawal</button>
+      </form>
+    </div>
+  </main>
+
+  <footer>&copy; 2025 MONIPAY. All rights reserved.</footer>
+
+  <script>
+    const burger = document.getElementById('hamburger'),
+          side = document.getElementById('sideMenu');
+    burger.onclick = () => side.classList.toggle('open');
+    document.addEventListener('click', e => {
+      if (side.classList.contains('open') && !side.contains(e.target) && !burger.contains(e.target))
+        side.classList.remove('open');
+    });
+
+    // Simulated bank name detection
+    const accNoInput = document.getElementById('accNo');
+    const bankSelect = document.getElementById('bankSelect');
+
+    accNoInput.addEventListener('input', () => {
+      if (accNoInput.value.length === 10) {
+        const banks = [...bankSelect.options].slice(1);
+        const randomBank = banks[Math.floor(Math.random() * banks.length)];
+        bankSelect.value = randomBank.value;
+      }
+    });
+
+    document.getElementById('withdrawForm').addEventListener('submit', function (e) {
+      e.preventDefault();
+      alert('Withdrawal submitted. Pending confirmation.');
+    });
+  </script>
+</body>
+</html>
